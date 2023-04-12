@@ -7,6 +7,7 @@ import com.example.demo.security.TokenInfo;
 import com.example.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +23,13 @@ import java.util.ArrayList;
 public class MemberController {
     private final MemberService memberService;
     private  final MemberRepository memberRepository;
+    private  final PasswordEncoder passwordEncoder;
 
-    @PostConstruct   //넣을 때 encode해서 넣고  비교할 때   mathces 메소드를 사용하자
+    @PostConstruct
     public void init(){
         ArrayList<String> strings = new ArrayList<>();
         strings.add("USER");
-        Member member=Member.builder().memberId("member_A").password("1234").roles(strings).build();
+        Member member=Member.builder().memberId("member_A").password(passwordEncoder.encode("1234")).roles(strings).build();
         memberRepository.save(member);
 
     }
